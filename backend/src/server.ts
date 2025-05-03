@@ -5,8 +5,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { authMiddleware } from "./middleware/authMiddleware";
 import connectDB from "./model/mongo";
-import auth_router from "./routes/auth_router";
-import healthcheck_router from "./routes/healthcheck_router";
+import router from "./routes/router";
 
 const PORT: number = process.env.RPPORT as unknown as number || 8080;
 const HOST: string = process.env.RPHOST || "0.0.0.0";
@@ -25,8 +24,7 @@ app.use(json());
 
 connectDB();
 
-app.use('/api/v1/healthcheck', healthcheck_router)
-app.use('/api/v1/auth', auth_router)
+app.use('/api', router)
 
 app.listen(PORT, HOST, () => {
     console.log(`Server up n' running on port ${HOST}:${PORT}`)
