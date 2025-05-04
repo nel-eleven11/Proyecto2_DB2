@@ -16,7 +16,7 @@ export const createRestaurante: RequestHandler = async (req, res) => {
 
 export const getRestaurantes: RequestHandler = async (req, res) => {
   try {
-    const restaurantes = await Restaurante.find().populate("menu");
+    const restaurantes = await Restaurante.find();
     res.json(restaurantes);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
@@ -29,7 +29,7 @@ export const getRestauranteById: RequestHandler = async (req, res) => {
       res.status(400).json({ error: "Invalid ID format" });
       return;
     }
-    const restaurante = await Restaurante.findById(req.params.id).populate("menu");
+    const restaurante = await Restaurante.findById(req.params.id);
     if (!restaurante) {
       res.status(404).json({ error: "Restaurante not found" });
       return;
@@ -133,9 +133,6 @@ export const createRestauranteArticulo: RequestHandler = async (req, res) => {
     };
     const articulo = new ArticuloMenu(articuloData);
     await articulo.save();
-    await Restaurante.findByIdAndUpdate(req.params.id, {
-      $push: { menu: articulo._id },
-    });
     res.status(201).json(articulo);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });

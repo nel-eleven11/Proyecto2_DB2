@@ -16,10 +16,6 @@ const restauranteSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  menu: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "ArticuloMenu",
-  }],
   calificacion_promedio: {
     type: Number,
     default: 0,
