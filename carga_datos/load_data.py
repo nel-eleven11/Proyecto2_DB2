@@ -17,10 +17,11 @@ db = client[DB_NAME]
 
 # 3) Mapeo de archivos CSV a colecciones
 csv_collections = {
-    "data/drivers_updated.csv": "drivers",
-    "data/winners.csv": "winners",
-    "data/fastest_laps_updated.csv": "fastest_laps",
-    "data/teams_updated.csv": "teams",
+    "data/usuarios.csv": "Usuario",
+    "data/restaurante.csv": "Restaurante",
+    "data/articulos_menu.csv": "ArticuloMenu",
+    "data/ordenes.csv": "Orden",
+    "data/resenas.csv": "Resena"
 }
 
 # 4) Función para procesar e insertar
