@@ -5,6 +5,9 @@ import {
   getResenaById,
   updateResena,
   deleteResena,
+  getResenasByUsuario,
+  sortResenasByRating,
+  sortResenasByDate,
 } from "../../controllers/rating/rating_controller";
 
 const router = Router();
@@ -15,5 +18,11 @@ router.get("/", getResenas);
 router.get("/:id", getResenaById);
 router.put("/:id", updateResena);
 router.delete("/:id", deleteResena);
+
+// Queries for ratings
+router.get("/by-user/:id", getResenasByUsuario);
+router.get("/sorted-by-rating", sortResenasByRating);
+router.get("/sorted-by-date", sortResenasByDate);
+
 
 export default router;

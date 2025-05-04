@@ -106,3 +106,30 @@ export const createUsuarioOrden: RequestHandler = async (req: Request, res: Resp
     res.status(400).json({ error: (error as Error).message });
   }
 };
+
+export const getUsuariosByNameOrApellido: RequestHandler = async (req, res) => {
+  try {
+    const { nombre, apellido } = req.query;
+    if (!nombre && !apellido) {
+      return res.status(400).json({ error: "Debe proporcionar 'nombre' o 'apellido'" });
+    }
+    const filters = [];
+    if (nombre)   filters.push({ nombre:   new RegExp(nombre as string,   "i") });
+    if (apellido) filters.push({ apellido: new RegExp(apellido as string, "i") });
+    const usuarios = await Usuario.find({ $or: filters });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortUsuariosByFechaRegistro: RequestHandler = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const usuarios = await Usuario.find().sort({ fecha_registro: sortOrder });
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

@@ -9,6 +9,9 @@ import {
   createRestauranteResena,
   getRestauranteArticulos,
   createRestauranteArticulo,
+  getRestaurantesByCategories,
+  sortRestaurantesByRating,
+  getRestaurantesByName,
 } from "../../controllers/restaurant/restaurant_controller";
 
 const router = Router();
@@ -27,5 +30,11 @@ router.post("/:id/resenas", createRestauranteResena);
 // Nested routes for articulos_menu
 router.get("/:id/articulos", getRestauranteArticulos);
 router.post("/:id/articulos", createRestauranteArticulo);
+
+// Queries routes for restaurant
+router.get("/by-categories", getRestaurantesByCategories);
+router.get("/sorted-by-rating", sortRestaurantesByRating);
+router.get("/by-name", getRestaurantesByName);
+
 
 export default router;

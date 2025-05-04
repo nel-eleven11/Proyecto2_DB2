@@ -138,3 +138,42 @@ export const createRestauranteArticulo: RequestHandler = async (req, res) => {
     res.status(400).json({ error: (error as Error).message });
   }
 };
+
+export const getRestaurantesByCategories: RequestHandler = async (req, res) => {
+  try {
+    const { categories } = req.query;
+    if (!categories) {
+      return res.status(400).json({ error: "El parámetro 'categories' es requerido" });
+    }
+    const cats = (categories as string).split(",").map(c => c.trim());
+    const restaurantes = await Restaurante.find({ categorias: { $in: cats } });
+    res.json(restaurantes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortRestaurantesByRating: RequestHandler = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const restaurantes = await Restaurante.find().sort({ calificacion_promedio: sortOrder });
+    res.json(restaurantes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const getRestaurantesByName: RequestHandler = async (req, res) => {
+  try {
+    const { nombre } = req.query;
+    if (!nombre) {
+      return res.status(400).json({ error: "El parámetro 'nombre' es requerido" });
+    }
+    const regex = new RegExp(nombre as string, "i");
+    const restaurantes = await Restaurante.find({ nombre: regex });
+    res.json(restaurantes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

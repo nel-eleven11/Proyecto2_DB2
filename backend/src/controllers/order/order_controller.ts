@@ -74,3 +74,61 @@ export const deleteOrden: RequestHandler = async (req, res) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+export const getOrdenesByEstado: RequestHandler = async (req, res) => {
+  try {
+    const { estado } = req.query;
+    if (!estado) {
+      return res.status(400).json({ error: "El parámetro 'estado' es requerido" });
+    }
+    const ordenes = await Orden
+      .find({ estado: estado as string })
+      .populate("usuario_id restaurante_id articulos.articulo_id");
+    res.json(ordenes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const getOrdenesByRestaurant: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Formato de ID inválido" });
+    }
+    const ordenes = await Orden
+      .find({ restaurante_id: id })
+      .populate("usuario_id restaurante_id articulos.articulo_id");
+    res.json(ordenes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortOrdenesByDate: RequestHandler = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const ordenes = await Orden
+      .find()
+      .sort({ fecha_pedido: sortOrder })
+      .populate("usuario_id restaurante_id articulos.articulo_id");
+    res.json(ordenes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortOrdenesByTotal: RequestHandler = async (req, res) => {
+  try {
+    const { order = "asc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const ordenes = await Orden
+      .find()
+      .sort({ total: sortOrder })
+      .populate("usuario_id restaurante_id articulos.articulo_id");
+    res.json(ordenes);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

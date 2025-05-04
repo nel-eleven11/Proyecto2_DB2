@@ -6,7 +6,9 @@ import {
   updateUsuario,
   deleteUsuario,
   getUsuarioOrdenes,
-  createUsuarioOrden
+  createUsuarioOrden,
+  getUsuariosByNameOrApellido,
+  sortUsuariosByFechaRegistro
 } from '../../controllers/user/userController';
 
 const router = Router();
@@ -21,5 +23,10 @@ router.delete("/:id", deleteUsuario);
 // Nested routes for ordenes
 router.get("/:id/ordenes", getUsuarioOrdenes);
 router.post("/:id/ordenes", createUsuarioOrden);
+
+// Queries for users
+router.get("/by-name", getUsuariosByNameOrApellido);
+router.get("/sorted-by-registration", sortUsuariosByFechaRegistro);
+
 
 export default router;

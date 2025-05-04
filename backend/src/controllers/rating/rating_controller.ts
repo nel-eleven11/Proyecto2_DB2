@@ -74,3 +74,46 @@ export const deleteResena: RequestHandler = async (req, res) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+export const getResenasByUsuario: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Formato de ID inválido" });
+    }
+    const resenas = await Resena
+      .find({ usuario_id: id })
+      .populate("usuario_id restaurante_id orden_id");
+    res.json(resenas);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortResenasByRating: RequestHandler = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const resenas = await Resena
+      .find()
+      .sort({ calificacion: sortOrder })
+      .populate("usuario_id restaurante_id orden_id");
+    res.json(resenas);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortResenasByDate: RequestHandler = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const resenas = await Resena
+      .find()
+      .sort({ fecha: sortOrder })
+      .populate("usuario_id restaurante_id orden_id");
+    res.json(resenas);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

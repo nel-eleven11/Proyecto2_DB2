@@ -7,9 +7,6 @@ export const createArticulo: RequestHandler = async (req, res) => {
   try {
     const articulo = new ArticuloMenu(req.body);
     await articulo.save();
-    await Restaurante.findByIdAndUpdate(req.body.restaurante_id, {
-      $push: { menu: articulo._id },
-    });
     res.status(201).json(articulo);
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
@@ -73,10 +70,40 @@ export const deleteArticulo: RequestHandler = async (req, res) => {
       res.status(404).json({ error: "Articulo not found" });
       return; 
     }
-    await Restaurante.findByIdAndUpdate(articulo.restaurante_id, {
-      $pull: { menu: articulo._id },
-    });
     res.json({ message: "Articulo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const sortArticulosByPrice: RequestHandler = async (req, res) => {
+  try {
+    const { order = "asc" } = req.query;
+    const sortOrder: 1 | -1 = order === "asc" ? 1 : -1;
+    const articulos = await ArticuloMenu.find().sort({ precio: sortOrder });
+    res.json(articulos);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const getAvailableArticulos: RequestHandler = async (_req, res) => {
+  try {
+    const articulos = await ArticuloMenu.find({ disponible: true });
+    res.json(articulos);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const getArticulosByPrice: RequestHandler = async (req, res) => {
+  try {
+    const { precio } = req.query;
+    if (precio == null) {
+      return res.status(400).json({ error: "El parámetro 'precio' es requerido" });
+    }
+    const articulos = await ArticuloMenu.find({ precio: Number(precio) });
+    res.json(articulos);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
