@@ -30,4 +30,4 @@ const restauranteSchema = new mongoose.Schema({
   timestamps: false,
 });
 
-export default mongoose.model("Restaurante", restauranteSchema);
+export default mongoose.model("Restaurante", restauranteSchema, "Restaurante");

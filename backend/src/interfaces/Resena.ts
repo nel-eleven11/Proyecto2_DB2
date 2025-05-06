@@ -34,4 +34,4 @@ const resenaSchema = new mongoose.Schema({
   timestamps: false,
 });
 
-export default mongoose.model("Resena", resenaSchema);
+export default mongoose.model("Resena", resenaSchema, "Resena");

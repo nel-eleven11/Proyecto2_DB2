@@ -29,4 +29,4 @@ const articuloMenuSchema = new mongoose.Schema({
   timestamps: false,
 });
 
-export default mongoose.model("ArticuloMenu", articuloMenuSchema);
+export default mongoose.model("ArticuloMenu", articuloMenuSchema, "ArticuloMenu");

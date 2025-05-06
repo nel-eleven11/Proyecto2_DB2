@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const ubicacionSchema = new mongoose.Schema({
+  lat: { type: Number, required: true },
+  lng: { type: Number, required: true }
+}, { _id: false });
+
 const usuarioSchema = new mongoose.Schema({
   nombre: {
     type: String,
@@ -24,9 +29,8 @@ const usuarioSchema = new mongoose.Schema({
     trim: true,
   },
   ubicacion: {
-    type: String,
-    required: true,
-    trim: true,
+    type: ubicacionSchema,
+    required: true
   },
   fecha_registro: {
     type: Date,
@@ -36,4 +40,8 @@ const usuarioSchema = new mongoose.Schema({
   timestamps: false,
 });
 
-export default mongoose.model("Usuario", usuarioSchema);
+export default mongoose.model(
+  "Usuario",
+  usuarioSchema,
+  "Usuario"
+);
