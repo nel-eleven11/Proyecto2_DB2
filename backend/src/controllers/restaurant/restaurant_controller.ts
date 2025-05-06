@@ -177,3 +177,50 @@ export const getRestaurantesByName: RequestHandler = async (req, res) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+export const queryRestaurantes: RequestHandler = async (req, res) => {
+  try {
+    // extraemos reservados y todo lo demás van a filtros
+    const {
+      sortField,
+      sortOrder,
+      skip,
+      limit,
+      fields,
+      ...filters
+    } = req.query;
+
+    // construimos filterObj (igualdad estricta)
+    const filterObj: Record<string, any> = {};
+    Object.entries(filters).forEach(([key, val]) => {
+      filterObj[key] = val;
+    });
+
+    // proyección
+    let projection: Record<string, 1> = {};
+    if (fields) {
+      (fields as string)
+        .split(",")
+        .map(f => f.trim())
+        .forEach(f => { projection[f] = 1; });
+    }
+
+    // arranco el query
+    const q = Restaurante.find(filterObj).select(projection);
+
+    // orden
+    if (sortField && sortOrder) {
+      const dir = sortOrder === "asc" ? 1 : -1;
+      q.sort({ [sortField as string]: dir });
+    }
+
+    // skip y limit
+    if (skip)  q.skip(Number(skip));
+    if (limit) q.limit(Number(limit));
+
+    const resultados = await q;
+    res.json(resultados);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

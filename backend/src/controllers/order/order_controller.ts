@@ -132,3 +132,30 @@ export const sortOrdenesByTotal: RequestHandler = async (req, res) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+export const queryOrdenes: RequestHandler = async (req, res) => {
+  try {
+    const { sortField, sortOrder, skip, limit, fields, ...filters } = req.query;
+    const filterObj: Record<string, any> = {};
+    Object.entries(filters).forEach(([k, v]) => { filterObj[k] = v; });
+
+    let projection: Record<string, 1> = {};
+    if (fields) {
+      (fields as string).split(",").map(f => f.trim()).forEach(f => { projection[f] = 1; });
+    }
+
+    const q = Orden.find(filterObj)
+      .select(projection)
+      .populate("usuario_id restaurante_id articulos.articulo_id");
+
+    if (sortField && sortOrder) {
+      q.sort({ [sortField as string]: (sortOrder === "asc" ? 1 : -1) });
+    }
+    if (skip)  q.skip(Number(skip));
+    if (limit) q.limit(Number(limit));
+
+    res.json(await q);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

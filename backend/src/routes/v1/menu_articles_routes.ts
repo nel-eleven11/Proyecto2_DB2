@@ -8,6 +8,7 @@ import {
   sortArticulosByPrice,
   getAvailableArticulos,
   getArticulosByPrice,
+  queryArticulos,
 } from "../../controllers/menu_article/menu_article_controller";
 
 const router = Router();
@@ -23,6 +24,6 @@ router.delete("/:id", deleteArticulo);
 router.get("/sorted-by-price", sortArticulosByPrice);
 router.get("/available", getAvailableArticulos);
 router.get("/by-price", getArticulosByPrice);
-
+router.get("/query", queryArticulos);
 
 export default router;

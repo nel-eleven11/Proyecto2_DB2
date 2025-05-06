@@ -12,6 +12,7 @@ import {
   getRestaurantesByCategories,
   sortRestaurantesByRating,
   getRestaurantesByName,
+  queryRestaurantes,
 } from "../../controllers/restaurant/restaurant_controller";
 
 const router = Router();
@@ -35,6 +36,8 @@ router.post("/:id/articulos", createRestauranteArticulo);
 router.get("/by-categories", getRestaurantesByCategories);
 router.get("/sorted-by-rating", sortRestaurantesByRating);
 router.get("/by-name", getRestaurantesByName);
+router.get("/query", queryRestaurantes);
+
 
 
 export default router;

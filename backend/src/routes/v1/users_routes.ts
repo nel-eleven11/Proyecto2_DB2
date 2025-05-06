@@ -8,7 +8,8 @@ import {
   getUsuarioOrdenes,
   createUsuarioOrden,
   getUsuariosByNameOrApellido,
-  sortUsuariosByFechaRegistro
+  sortUsuariosByFechaRegistro,
+  queryUsuarios,
 } from '../../controllers/user/userController';
 
 const router = Router();
@@ -27,6 +28,7 @@ router.post("/:id/ordenes", createUsuarioOrden);
 // Queries for users
 router.get("/by-name", getUsuariosByNameOrApellido);
 router.get("/sorted-by-registration", sortUsuariosByFechaRegistro);
+router.get("/query", queryUsuarios);
 
 
 export default router;
