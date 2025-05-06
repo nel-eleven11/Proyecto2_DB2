@@ -79,7 +79,8 @@ export const getResenasByUsuario: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Formato de ID inválido" });
+      res.status(400).json({ error: "Formato de ID inválido" });
+      return;           
     }
     const resenas = await Resena
       .find({ usuario_id: id })
@@ -87,8 +88,10 @@ export const getResenasByUsuario: RequestHandler = async (req, res) => {
     res.json(resenas);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
+    return;
   }
 };
+
 
 export const sortResenasByRating: RequestHandler = async (req, res) => {
   try {

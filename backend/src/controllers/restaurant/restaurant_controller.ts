@@ -143,15 +143,19 @@ export const getRestaurantesByCategories: RequestHandler = async (req, res) => {
   try {
     const { categories } = req.query;
     if (!categories) {
-      return res.status(400).json({ error: "El parámetro 'categories' es requerido" });
+      res.status(400).json({ error: "El parámetro 'categories' es requerido" });
+      return;
     }
-    const cats = (categories as string).split(",").map(c => c.trim());
+    const cats = (categories as string)
+      .split(",")
+      .map(c => c.trim());
     const restaurantes = await Restaurante.find({ categorias: { $in: cats } });
     res.json(restaurantes);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
 
 export const sortRestaurantesByRating: RequestHandler = async (req, res) => {
   try {
@@ -168,7 +172,8 @@ export const getRestaurantesByName: RequestHandler = async (req, res) => {
   try {
     const { nombre } = req.query;
     if (!nombre) {
-      return res.status(400).json({ error: "El parámetro 'nombre' es requerido" });
+      res.status(400).json({ error: "El parámetro 'nombre' es requerido" });
+      return;
     }
     const regex = new RegExp(nombre as string, "i");
     const restaurantes = await Restaurante.find({ nombre: regex });

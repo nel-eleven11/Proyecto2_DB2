@@ -79,7 +79,8 @@ export const getOrdenesByEstado: RequestHandler = async (req, res) => {
   try {
     const { estado } = req.query;
     if (!estado) {
-      return res.status(400).json({ error: "El parámetro 'estado' es requerido" });
+      res.status(400).json({ error: "El parámetro 'estado' es requerido" });
+      return;
     }
     const ordenes = await Orden
       .find({ estado: estado as string })
@@ -94,7 +95,8 @@ export const getOrdenesByRestaurant: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ error: "Formato de ID inválido" });
+      res.status(400).json({ error: "Formato de ID inválido" });
+      return;
     }
     const ordenes = await Orden
       .find({ restaurante_id: id })

@@ -100,7 +100,8 @@ export const getArticulosByPrice: RequestHandler = async (req, res) => {
   try {
     const { precio } = req.query;
     if (precio == null) {
-      return res.status(400).json({ error: "El parámetro 'precio' es requerido" });
+      res.status(400).json({ error: "El parámetro 'precio' es requerido" });
+      return;
     }
     const articulos = await ArticuloMenu.find({ precio: Number(precio) });
     res.json(articulos);

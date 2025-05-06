@@ -111,9 +111,10 @@ export const getUsuariosByNameOrApellido: RequestHandler = async (req, res) => {
   try {
     const { nombre, apellido } = req.query;
     if (!nombre && !apellido) {
-      return res.status(400).json({ error: "Debe proporcionar 'nombre' o 'apellido'" });
+      res.status(400).json({ error: "Debe proporcionar 'nombre' o 'apellido'" });
+      return;
     }
-    const filters = [];
+    const filters: Record<string, any>[] = [];
     if (nombre)   filters.push({ nombre:   new RegExp(nombre as string,   "i") });
     if (apellido) filters.push({ apellido: new RegExp(apellido as string, "i") });
     const usuarios = await Usuario.find({ $or: filters });
