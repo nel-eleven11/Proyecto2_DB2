@@ -16,6 +16,12 @@ import {
 
 const router = Router();
 
+// Queries for ratings
+router.get("/by-user/:id", getResenasByUsuario);
+router.get("/sorted-by-rating", sortResenasByRating);
+router.get("/sorted-by-date", sortResenasByDate);
+router.get("/query", queryResenas);
+
 // CRUD routes
 router.post("/", createResena);
 router.post("/bulk", createMultipleResenas);
@@ -26,10 +32,6 @@ router.put("/:id", updateResena);
 router.delete("/bulk", deleteMultipleResenas);
 router.delete("/:id", deleteResena);
 
-// Queries for ratings
-router.get("/by-user/:id", getResenasByUsuario);
-router.get("/sorted-by-rating", sortResenasByRating);
-router.get("/sorted-by-date", sortResenasByDate);
-router.get("/query", queryResenas);
+
 
 export default router;

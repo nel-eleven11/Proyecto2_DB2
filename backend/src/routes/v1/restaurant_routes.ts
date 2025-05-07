@@ -20,6 +20,12 @@ import {
 
 const router = Router();
 
+// Queries routes for restaurant
+router.get("/by-categories", getRestaurantesByCategories);
+router.get("/sorted-by-rating", sortRestaurantesByRating);
+router.get("/by-name", getRestaurantesByName);
+router.get("/query", queryRestaurantes);
+
 // CRUD routes
 router.post("/", createRestaurante);
 router.post("/bulk", createMultipleRestaurantes);
@@ -38,11 +44,7 @@ router.post("/:id/resenas", createRestauranteResena);
 router.get("/:id/articulos", getRestauranteArticulos);
 router.post("/:id/articulos", createRestauranteArticulo);
 
-// Queries routes for restaurant
-router.get("/by-categories", getRestaurantesByCategories);
-router.get("/sorted-by-rating", sortRestaurantesByRating);
-router.get("/by-name", getRestaurantesByName);
-router.get("/query", queryRestaurantes);
+
 
 
 

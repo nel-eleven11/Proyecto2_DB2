@@ -17,6 +17,13 @@ import {
 
 const router = Router();
 
+// Queries for orders
+router.get("/by-status", getOrdenesByEstado);
+router.get("/by-restaurant/:id", getOrdenesByRestaurant);
+router.get("/sorted-by-date", sortOrdenesByDate);
+router.get("/sorted-by-total", sortOrdenesByTotal);
+router.get("/query", queryOrdenes);
+
 // CRUD routes
 router.post("/", createOrden);
 router.post("/bulk", createMultipleOrdenes);
@@ -27,11 +34,6 @@ router.put("/:id", updateOrden);
 router.delete("/bulk", deleteMultipleOrdenes);
 router.delete("/:id", deleteOrden);
 
-// Queries for orders
-router.get("/by-status", getOrdenesByEstado);
-router.get("/by-restaurant/:id", getOrdenesByRestaurant);
-router.get("/sorted-by-date", sortOrdenesByDate);
-router.get("/sorted-by-total", sortOrdenesByTotal);
-router.get("/query", queryOrdenes);
+
 
 export default router;

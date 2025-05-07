@@ -17,6 +17,11 @@ import {
 
 const router = Router();
 
+// Queries for users
+router.get("/by-name", getUsuariosByNameOrApellido);
+router.get("/sorted-by-registration", sortUsuariosByFechaRegistro);
+router.get("/query", queryUsuarios);
+
 // CRUD routes
 router.post("/", createUsuario);
 router.post("/bulk", createMultipleUsuarios);
@@ -31,10 +36,7 @@ router.delete("/:id", deleteUsuario);
 router.get("/:id/ordenes", getUsuarioOrdenes);
 router.post("/:id/ordenes", createUsuarioOrden);
 
-// Queries for users
-router.get("/by-name", getUsuariosByNameOrApellido);
-router.get("/sorted-by-registration", sortUsuariosByFechaRegistro);
-router.get("/query", queryUsuarios);
+
 
 
 export default router;
