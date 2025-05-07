@@ -1,10 +1,13 @@
 import Router from "express";
 import {
   createRestaurante,
+  createMultipleRestaurantes,
   getRestaurantes,
   getRestauranteById,
   updateRestaurante,
+  updateMultipleRestaurantes,
   deleteRestaurante,
+  deleteMultipleRestaurantes,
   getRestauranteResenas,
   createRestauranteResena,
   getRestauranteArticulos,
@@ -19,9 +22,12 @@ const router = Router();
 
 // CRUD routes
 router.post("/", createRestaurante);
+router.post("/bulk", createMultipleRestaurantes);
 router.get("/", getRestaurantes);
 router.get("/:id", getRestauranteById);
+router.put("/bulk", updateMultipleRestaurantes);
 router.put("/:id", updateRestaurante);
+router.delete("/bulk", deleteMultipleRestaurantes);
 router.delete("/:id", deleteRestaurante);
 
 // Nested routes for resenas

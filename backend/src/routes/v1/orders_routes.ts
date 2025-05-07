@@ -1,10 +1,13 @@
 import Router from "express";
 import {
   createOrden,
+  createMultipleOrdenes,
   getOrdenes,
   getOrdenById,
   updateOrden,
+  updateMultipleOrdenes,
   deleteOrden,
+  deleteMultipleOrdenes,
   getOrdenesByEstado,
   getOrdenesByRestaurant,
   sortOrdenesByDate,
@@ -16,9 +19,12 @@ const router = Router();
 
 // CRUD routes
 router.post("/", createOrden);
+router.post("/bulk", createMultipleOrdenes);
 router.get("/", getOrdenes);
 router.get("/:id", getOrdenById);
+router.put("/bulk", updateMultipleOrdenes);
 router.put("/:id", updateOrden);
+router.delete("/bulk", deleteMultipleOrdenes);
 router.delete("/:id", deleteOrden);
 
 // Queries for orders
@@ -27,7 +33,5 @@ router.get("/by-restaurant/:id", getOrdenesByRestaurant);
 router.get("/sorted-by-date", sortOrdenesByDate);
 router.get("/sorted-by-total", sortOrdenesByTotal);
 router.get("/query", queryOrdenes);
-
-
 
 export default router;

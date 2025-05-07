@@ -13,6 +13,20 @@ export const createUsuario: RequestHandler = async (req: Request, res: Response)
   }
 };
 
+export const createMultipleUsuarios: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const usuariosData = req.body;
+    if (!Array.isArray(usuariosData)) {
+      res.status(400).json({ error: "Se esperaba un array de usuarios" });
+    }
+    
+    const usuarios = await Usuario.insertMany(usuariosData, { ordered: false });
+    res.status(201).json(usuarios);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const getUsuarios: RequestHandler = async (req: Request, res: Response) => {
   try {
     const usuarios = await Usuario.find();
@@ -59,6 +73,26 @@ export const updateUsuario: RequestHandler = async (req: Request, res: Response)
   }
 };
 
+export const updateMultipleUsuarios: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const { filter, update } = req.body;
+    if (!filter || !update) {
+      res.status(400).json({ error: "Se requiere filter y update en el body" });
+    }
+
+    const result = await Usuario.updateMany(filter, update, {
+      runValidators: true
+    });
+    
+    res.json({
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const deleteUsuario: RequestHandler = async (req: Request, res: Response) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -71,6 +105,24 @@ export const deleteUsuario: RequestHandler = async (req: Request, res: Response)
       return;
     }
     res.json({ message: "Usuario deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteMultipleUsuarios: RequestHandler = async (req: Request, res: Response) => {
+  try {
+    const { filter } = req.body;
+    if (!filter) {
+      res.status(400).json({ error: "Se requiere un filter en el body" });
+    }
+
+    const result = await Usuario.deleteMany(filter);
+    
+    res.json({
+      deletedCount: result.deletedCount,
+      message: "Usuarios eliminados exitosamente"
+    });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

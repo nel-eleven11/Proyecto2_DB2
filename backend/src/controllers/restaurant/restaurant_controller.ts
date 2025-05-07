@@ -14,6 +14,20 @@ export const createRestaurante: RequestHandler = async (req, res) => {
   }
 };
 
+export const createMultipleRestaurantes: RequestHandler = async (req, res) => {
+  try {
+    const restaurantesData = req.body;
+    if (!Array.isArray(restaurantesData)) {
+      res.status(400).json({ error: "Se esperaba un array de restaurantes" });
+    }
+    
+    const restaurantes = await Restaurante.insertMany(restaurantesData, { ordered: false });
+    res.status(201).json(restaurantes);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const getRestaurantes: RequestHandler = async (req, res) => {
   try {
     const restaurantes = await Restaurante.find();
@@ -60,6 +74,26 @@ export const updateRestaurante: RequestHandler = async (req, res) => {
   }
 };
 
+export const updateMultipleRestaurantes: RequestHandler = async (req, res) => {
+  try {
+    const { filter, update } = req.body;
+    if (!filter || !update) {
+      res.status(400).json({ error: "Se requiere filter y update en el body" });
+    }
+
+    const result = await Restaurante.updateMany(filter, update, {
+      runValidators: true
+    });
+    
+    res.json({
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const deleteRestaurante: RequestHandler = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -72,6 +106,24 @@ export const deleteRestaurante: RequestHandler = async (req, res) => {
       return;
     }
     res.json({ message: "Restaurante deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteMultipleRestaurantes: RequestHandler = async (req, res) => {
+  try {
+    const { filter } = req.body;
+    if (!filter) {
+      res.status(400).json({ error: "Se requiere un filter en el body" });
+    }
+
+    const result = await Restaurante.deleteMany(filter);
+    
+    res.json({
+      deletedCount: result.deletedCount,
+      message: "Restaurantes eliminados exitosamente"
+    });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

@@ -12,6 +12,20 @@ export const createOrden: RequestHandler = async (req, res) => {
   }
 };
 
+export const createMultipleOrdenes: RequestHandler = async (req, res) => {
+  try {
+    const ordenesData = req.body;
+    if (!Array.isArray(ordenesData)) {
+      res.status(400).json({ error: "Se esperaba un array de órdenes" });
+    }
+    
+    const ordenes = await Orden.insertMany(ordenesData, { ordered: false });
+    res.status(201).json(ordenes);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const getOrdenes: RequestHandler = async (req, res) => {
   try {
     const ordenes = await Orden.find().populate("usuario_id restaurante_id articulos.articulo_id");
@@ -58,6 +72,26 @@ export const updateOrden: RequestHandler = async (req, res) => {
   }
 };
 
+export const updateMultipleOrdenes: RequestHandler = async (req, res) => {
+  try {
+    const { filter, update } = req.body;
+    if (!filter || !update) {
+      res.status(400).json({ error: "Se requiere filter y update en el body" });
+    }
+
+    const result = await Orden.updateMany(filter, update, {
+      runValidators: true
+    });
+    
+    res.json({
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const deleteOrden: RequestHandler = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -70,6 +104,24 @@ export const deleteOrden: RequestHandler = async (req, res) => {
       return;
     }
     res.json({ message: "Orden deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteMultipleOrdenes: RequestHandler = async (req, res) => {
+  try {
+    const { filter } = req.body;
+    if (!filter) {
+      res.status(400).json({ error: "Se requiere un filter en el body" });
+    }
+
+    const result = await Orden.deleteMany(filter);
+    
+    res.json({
+      deletedCount: result.deletedCount,
+      message: "Órdenes eliminadas exitosamente"
+    });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

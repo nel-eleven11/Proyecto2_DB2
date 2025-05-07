@@ -13,6 +13,20 @@ export const createArticulo: RequestHandler = async (req, res) => {
   }
 };
 
+export const createMultipleArticulos: RequestHandler = async (req, res) => {
+  try {
+    const articulosData = req.body;
+    if (!Array.isArray(articulosData)) {
+      res.status(400).json({ error: "Se esperaba un array de artículos" });
+    }
+    
+    const articulos = await ArticuloMenu.insertMany(articulosData, { ordered: false });
+    res.status(201).json(articulos);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
 export const getArticulos: RequestHandler = async (req, res) => {
   try {
     const articulos = await ArticuloMenu.find().populate("restaurante_id");
@@ -59,6 +73,27 @@ export const updateArticulo: RequestHandler = async (req, res) => {
   }
 };
 
+export const updateMultipleArticulos: RequestHandler = async (req, res) => {
+  try {
+    const { filter, update } = req.body;
+    if (!filter || !update) {
+      res.status(400).json({ error: "Se requiere filter y update en el body" });
+    }
+
+    const result = await ArticuloMenu.updateMany(filter, update, {
+      runValidators: true
+    });
+    
+    res.json({
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
+};
+
+
 export const deleteArticulo: RequestHandler = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -71,6 +106,24 @@ export const deleteArticulo: RequestHandler = async (req, res) => {
       return; 
     }
     res.json({ message: "Articulo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const deleteMultipleArticulos: RequestHandler = async (req, res) => {
+  try {
+    const { filter } = req.body;
+    if (!filter) {
+      res.status(400).json({ error: "Se requiere un filter en el body" });
+    }
+
+    const result = await ArticuloMenu.deleteMany(filter);
+    
+    res.json({
+      deletedCount: result.deletedCount,
+      message: "Artículos eliminados exitosamente"
+    });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
