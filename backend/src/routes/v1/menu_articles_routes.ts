@@ -21,10 +21,10 @@ router.post("/", createArticulo);
 router.post("/bulk", createMultipleArticulos);
 router.get("/", getArticulos);
 router.get("/:id", getArticuloById);
-router.put("/:id", updateArticulo);
 router.put("/bulk", updateMultipleArticulos);
-router.delete("/:id", deleteArticulo);
+router.put("/:id", updateArticulo);
 router.delete("/bulk", deleteMultipleArticulos);
+router.delete("/:id", deleteArticulo);
 
 // Queries for menu_articles
 router.get("/sorted-by-price", sortArticulosByPrice);
